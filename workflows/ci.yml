@@ -1,0 +1,33 @@
+name: "testing"
+
+on:
+  push:
+
+# TODO build a json matrix payload
+jobs:
+  test:
+    outputs:
+      runners: ${{ steps.payload.outputs.runners }}
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: clone repo
+        uses: actions/checkout@v3
+
+      - name: get the payload
+        id: payload
+        uses: .
+
+
+  multiple:
+    needs:
+     - test
+    strategy:
+      fail-fast: true
+      matrix:
+        runner: ${{ fromJSON(needs.test.outputs.runners) }}
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: 'run'
+        run: |
+          echo "hey"
+

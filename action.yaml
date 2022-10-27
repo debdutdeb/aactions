@@ -1,0 +1,20 @@
+name: Build payload
+description: ''
+
+inputs: {}
+outputs:
+  runners:
+    description: "runners json array"
+    value: ${{ steps.runners.outputs.runners }}
+
+runs:
+  using: composite
+  steps:
+    - name: build payload
+      shell: bash
+      id: runners
+      run: |
+        runners=$(jo -a ubuntu-latest ubuntu-latest ubuntu-latest)
+        echo "runners: $runners"
+        echo "runners=$runners" >> $GITHUB_OUTPUT
+
